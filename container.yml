@@ -1,0 +1,27 @@
+---
+  - name: Prepare Container for Testing
+    hosts: localhost
+    connection: local
+    become: yes
+    tasks:
+      - name: Install OpenSSH
+        ansible.builtin.package:
+          name:
+            - openssh-server
+          state: latest
+
+      - name: Create Ansible user with key
+        ansible.builtin.user:
+          name: ansible
+          generate_ssh_key: yes
+          ssh_key_bits: 2048
+        register: new_user
+        become: yes
+      - name: Set authorized key
+        authorized_key:
+          user: ansible
+          state: present
+          key: "{{ new_user.ssh_public_key }}"
+        become: yes
+      
+
