@@ -20,10 +20,5 @@ RUN pip3 install --upgrade pip
 
 # Install Ansible via Pip.
 RUN pip3 install ansible
-RUN groupadd ansible && useradd -g ansible -p test123 -ms /bin/bash ansible 
-WORKDIR /home/ansible
-COPY id_rsa.pub .ssh/authorized_keys
-RUN chown ansible:ansible .ssh/authorized_keys && \
-    chmod 600 .ssh/authorized_keys
-EXPOSE 22
+RUN mkdir -p /ansible
 ENTRYPOINT [ "/usr/sbin/init" ]
